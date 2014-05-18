@@ -3,18 +3,38 @@
 
 ## Loading and preprocessing the data
 
+```{r}
+data <- read.csv("~/Documents/R/activity.csv")
+data_filtered <- data[!is.na(data$steps),]
+data_split <- with(data_filtered, split(steps, date))
+steps_by_day <- lapply(data_split, sum)
+steps_by_day <- unlist(steps_by_day)
+```
+
+## Mean total number of steps taken per day
+
+```{r, echo=FALSE}
+hist(steps_by_day, main = "Histogram of steps per day", xlab = "Steps per day")
+cat("Mean steps per day: ", mean(steps_by_day))
+cat("Median steps per day: ", median(steps_by_day))
+```
+
+## Average daily activity pattern
+
+```{r, echo=FALSE}
+data <- read.csv("~/Documents/R/activity.csv")
+data_filtered <- data[!is.na(data$steps),]
+data_split <- with(data_filtered, split(steps, interval))
+steps_by_interval <- lapply(data_split, mean)
+x_axis <- names(steps_by_interval)
+plot(x_axis, steps_by_interval, type = "l", xlab = "Interval", ylab = "Steps", main = "Time series: interval vs steps")
+maxim <- max(as.numeric(steps_by_interval))
+maxim_interval <- names(steps_by_interval[steps_by_interval == maxim])
+cat("Interval with average maximum steps/ average maximum steps = ", maxim_interval,"/", maxim)
+```
+
+## Inputing missing values
 
 
-## What is mean total number of steps taken per day?
 
-
-
-## What is the average daily activity pattern?
-
-
-
-## Imputing missing values
-
-
-
-## Are there differences in activity patterns between weekdays and weekends?
+## Differences in activity patterns between weekdays and weekends
